@@ -299,6 +299,7 @@ function createSectionsFromData(data) {
 
 // Funktion zum Abrufen der aktuellen Daten aus den Haupt- und Unterabschnitten
 function getCurrentData() {
+    tinymce.triggerSave();
     const inputData = {
         firma: $('#firma').val(),
         person: $('#person').val(),
@@ -330,8 +331,10 @@ $('#add-main-section').on('click', function () {
 $('#main-container').sortable({
     placeholder: "sortable-placeholder",
     handle: ".main-section-handle",
+    
     onStart: function () {
         updateAllTinyMCEEditors();
+        updateSectionNumbers();
     },
     onEnd: function () {
         updateAllTinyMCEEditors();
@@ -352,6 +355,7 @@ $(document).on('mouseenter', '.main-section', function () {
             handle: ".sub-section-handle",
             onStart: function () {
                 updateAllTinyMCEEditors();
+                updateSectionNumbers();
             },
             onEnd: function () {
                 updateAllTinyMCEEditors();
