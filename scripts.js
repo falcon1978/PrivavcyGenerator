@@ -206,6 +206,11 @@ $('#save-template').on('click', function () {
 
 // Funktion zum Hinzufügen eines Hauptabschnitts
 function addMainSection(title, content) {
+    $('#main-container').append(sectionWrapper).promise().done(function() {
+        tinymce.init({ ...tinyMceOptions, selector: '#' + mainContentTextareaId });
+        updateSectionNumbers();
+    });
+    
     const sectionWrapper = $('<div class="section-wrapper"></div>');    
     const mainSection = $('<div class="main-section"></div>');
     const mainSectionHandle = $('<div class="handle main-section-handle">&#x2195;</div>');
@@ -239,7 +244,10 @@ function addMainSection(title, content) {
 }
 
 function addSubSection(parent, title, content) {
-    
+    parent.append(subSection).promise().done(function() {
+        tinymce.init({ ...tinyMceOptions, selector: '#' + subContentTextareaId });
+        updateSectionNumbers();
+    });
     const subSection = $('<div class="sub-section"></div>');
     const subSectionHandle = $('<div class="handle sub-section-handle">&#x2195;</div>');
     const titleInput = $(`<input type="text" class="form-control sub-section-title mb-1" value="${title || ''}">`);
