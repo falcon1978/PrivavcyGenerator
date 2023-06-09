@@ -326,10 +326,11 @@ $(document).ready(function () {
     addSubSection(mainSection, "Beispiel Unterabschnitt", "<p>Beispielinhalt für den Unterabschnitt</p>");
 });
 function updateAllTinyMCEEditors() {
-    tinymce.editors.forEach((editor) => {
-        editor.save(); // Aktualisiert den Inhalt der zugehörigen Textarea
+    tinyMCE.editors.forEach(function (editor) {
+        editor.save(); // This updates the textarea that the editor is based on
     });
 }
+
 
 // Ereignishandler zum Hinzufügen eines Hauptabschnitts
 $('#add-main-section').on('click', function () {
