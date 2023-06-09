@@ -206,10 +206,7 @@ $('#save-template').on('click', function () {
 
 // Funktion zum Hinzufügen eines Hauptabschnitts
 function addMainSection(title, content) {
-    $('#main-container').append(sectionWrapper).promise().done(function() {
-        tinymce.init({ ...tinyMceOptions, selector: '#' + mainContentTextareaId });
-        updateSectionNumbers();
-    });
+    
     
     const sectionWrapper = $('<div class="section-wrapper"></div>');    
     const mainSection = $('<div class="main-section"></div>');
@@ -219,7 +216,10 @@ function addMainSection(title, content) {
     const contentTextarea = $(`<textarea class="mb-1 form-control main-section-content" id="${mainContentTextareaId}">${content || ''}</textarea>`);
     const deleteMainButton = $('<button class="btn btn-sm btn-danger delete-section mt-1 mb-1">Hauptabschnitt löschen</button>');
     const addSubButton = $('<button class="btn btn-sm btn-primary add-subsection mt-1 mb-1">Unterabschnitt hinzufügen</button>');
-
+    $('#main-container').append(sectionWrapper).promise().done(function() {
+        tinymce.init({ ...tinyMceOptions, selector: '#' + mainContentTextareaId });
+        updateSectionNumbers();
+    });
     mainSection.append(mainSectionHandle);
     mainSection.append(titleInput);
     mainSection.append(contentTextarea);
@@ -244,10 +244,7 @@ function addMainSection(title, content) {
 }
 
 function addSubSection(parent, title, content) {
-    parent.append(subSection).promise().done(function() {
-        tinymce.init({ ...tinyMceOptions, selector: '#' + subContentTextareaId });
-        updateSectionNumbers();
-    });
+    
     const subSection = $('<div class="sub-section"></div>');
     const subSectionHandle = $('<div class="handle sub-section-handle">&#x2195;</div>');
     const titleInput = $(`<input type="text" class="form-control sub-section-title mb-1" value="${title || ''}">`);
@@ -259,7 +256,10 @@ function addSubSection(parent, title, content) {
     subSection.append(contentTextarea);
     subSection.append(deleteSubButton);
     
-
+    parent.append(subSection).promise().done(function() {
+        tinymce.init({ ...tinyMceOptions, selector: '#' + subContentTextareaId });
+        updateSectionNumbers();
+    });
     // Event-Handler für das Löschen von Unterabschnitten
     subSection.on('click', '.delete-subsection', function () {
         $(this).closest('.sub-section').remove();
@@ -340,11 +340,11 @@ $('#main-container').sortable({
     placeholder: "sortable-placeholder",
     handle: ".main-section-handle",
     
-    onStart: function () {
+    start: function () {
         updateAllTinyMCEEditors();
         updateSectionNumbers();
     },
-    onEnd: function () {
+    stop: function () {
         updateAllTinyMCEEditors();
         updateSectionNumbers();
     },
@@ -361,11 +361,11 @@ $(document).on('mouseenter', '.main-section', function () {
             items: '.sub-section',
             placeholder: "sortable-placeholder",
             handle: ".sub-section-handle",
-            onStart: function () {
+            start: function () {
                 updateAllTinyMCEEditors();
                 updateSectionNumbers();
             },
-            onEnd: function () {
+            stop: function () {
                 updateAllTinyMCEEditors();
                 updateSectionNumbers();
             },
@@ -513,6 +513,13 @@ $('#copy-content').on('click', function () {
     alert('Inhalt kopiert!');
 });
 
+function refreshTinyMCE(selector) {
+    // Entferne TinyMCE von dem Element
+    tinymce.remove(selector);
+
+    // Initialisiere TinyMCE erneut auf dem Element
+    tinymce.init({ ...tinyMceOptions, selector: selector });
+}
 
 
 
